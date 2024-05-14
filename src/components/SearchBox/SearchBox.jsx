@@ -1,8 +1,10 @@
 import React, { Component, useState } from 'react';
 import './SearchBox.css';
+import { useDispatch } from 'react-redux';
+import { fetchMovie } from '../../Reducer/MoviesReducer';
 
 const SearchBox =() => {
-    
+    const dispatch = useDispatch()
    const [state,setState] =  useState({
         searchLine: ''
     }
@@ -12,7 +14,9 @@ const SearchBox =() => {
         setState({ searchLine: e.target.value });
     }
     const searchBoxSubmitHandler = (e) => {
+        console.log('clicked')
         e.preventDefault();
+        dispatch(fetchMovie(state.searchLine))
     }
 
    const { searchLine } = state;
@@ -31,6 +35,7 @@ const SearchBox =() => {
                         />
                     </label>
                     <button
+                    onClick={searchBoxSubmitHandler}
                         type="submit"
                         className="search-box__form-submit"
                         disabled={!searchLine}
