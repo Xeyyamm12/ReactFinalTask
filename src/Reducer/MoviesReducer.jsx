@@ -5,6 +5,7 @@ const initialState =  {
     data:[
        
     ],
+    favorite:[],
     error:false
     
 }
@@ -17,6 +18,12 @@ export const ListSlice = createSlice({
     name:"MovieList",
     initialState,
     reducers:{
+        add:(state,action)=>{
+            state.favorite=[...state.favorite.filter(item=>item.imdbID!==action.payload.imdbID),action.payload]
+        },
+        remove:(state,action)=>{
+            state.favorite=[...state.favorite.filter(item=>item.imdbID!==action.payload.imdbID)]
+        }
     },
     extraReducers:(builder)=>{
         builder.addCase(fetchMovie.pending,(state)=>{
@@ -33,5 +40,5 @@ export const ListSlice = createSlice({
     }
 })
 
-export const {} = ListSlice.actions
+export const {add ,remove} = ListSlice.actions
 export default ListSlice.reducer

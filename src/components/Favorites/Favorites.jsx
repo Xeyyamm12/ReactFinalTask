@@ -1,24 +1,43 @@
-import React, { Component, useState } from 'react';
-import './Favorites.css';
+import React, { Component, useState } from "react";
+import "./Favorites.css";
+import { useDispatch, useSelector } from "react-redux";
+import { remove } from "../../Reducer/MoviesReducer";
+import axios from "axios";
 
+const Favorites = () => {
+  const favs = useSelector((state) => state.MovieList.favorite);
+  const dispatch = useDispatch();
+  console.log(favs);
+     const [state,setState] =  useState()
+  return (
+    <div className="favorites">
+      <input value={state} placeholder="List Name " className="favorites__name" onInput={(e)=>{
+        setState(e.target.value)
+      }} />
+      <ul className="favorites__list">
+        {favs.map((item) => {
+          return (
+            <li key={item.imdbID}>
+              {item.Title} ({item.Year}){" "}
+              <button
+                onClick={() => {
+                  dispatch(remove(item));
+                }}
+              >
+                X
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <button onClick={()=>{
+        console.log('is')
+        axios.post('https://acb-api.algoritmika.org/api/movies/list ',{title:state,movies:[...favs.map(item=>item.imdbID)]})
+      }} type="button" className="favorites__save">
+        save
+      </button>
+    </div>
+  );
+};
 
-const Favorites =  ()=> {
-   const [state,setState] =  useState({
-        title: 'Новый список',
-        movies: [
-            { imdbID: 'tt0068646', title: 'The Godfather', year: 1972 }
-        ]
-    })
-   return ( <div className="favorites">
-                <input value="Новый список" className="favorites__name" />
-                <ul className="favorites__list">
-                    {state.movies.map((item) => {
-                        return <li key={item.id}>{item.title} ({item.year})</li>;
-                    })}
-                </ul>
-                <button type="button" className="favorites__save">Сохранить список</button>
-            </div>
-        );
-}
- 
 export default Favorites;
